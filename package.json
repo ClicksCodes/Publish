@@ -1,0 +1,14 @@
+{
+  "name": "CMPublish-2",
+  "version": "1.0.0",
+  "description": "The second version of CMPublish, a bot to automatically publish posts in announcement channels",
+  "main": "dist/index.js",
+  "repository": "https://github.com/ClicksMinutePer/Publish",
+  "author": "Skyler Grey <skyler3665@gmail.com>",
+  "license": "AGPL3",
+  "private": true,
+  "dependencies": {
+    "discord.js": "^14.7.1",
+    "typescript": "^4.9.4"
+  }
+}
