@@ -17,5 +17,6 @@
   },
   "devDependencies": {
     "@tsconfig/node18-strictest-esm": "^1.0.1"
-  }
+  },
+  "type": "module"
 }

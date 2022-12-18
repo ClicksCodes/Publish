@@ -15,7 +15,7 @@ You can exclude a channel from being automatically published by adding
 > How do I exclude a single message?
 
 Starting a message with `=>` will stop it from being automatically published. Once
-you've sent it you can edit away the `=>`` if you'd like
+you've sent it you can edit away the `=>` if you'd like
 
 > The bot isn't working
 

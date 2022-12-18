@@ -7,23 +7,36 @@ import {
 import fs from "fs";
 
 const client = new Client({
-  intents: [GatewayIntentBits.GuildMessages],
+  intents: [
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.DirectMessages,
+  ],
 });
 
 client.on("messageCreate", async (message) => {
+  if (message.author === client.user) return;
+
   if (
-    message.content == `<@${client.user!.id}>` ||
+    message.channel.type === ChannelType.DM ||
+    message.content === `<@${client.user!.id}>` ||
     (message.content.includes(`<@${client.user!.id}>`) &&
-      message.channel.type != ChannelType.GuildAnnouncement) ||
-    message.channel.type == ChannelType.DM
+      message.channel.type !== ChannelType.GuildAnnouncement)
   ) {
-    await message.channel.send({
+    if (
+      !(
+        message.channel.type === ChannelType.DM ||
+        message.channel.permissionsFor(client.user!)?.has("SendMessages")
+      )
+    )
+      return;
+    await message.reply({
       embeds: [
         new EmbedBuilder()
           .setDescription(
             await new Promise((resolve, reject) =>
-              fs.readFile("./help.md", (err, data) =>
-                err != null ? reject(err) : resolve(data.toString())
+              fs.readFile("./src/help.md", (err, data) =>
+                err !== null ? reject(err) : resolve(data.toString())
               )
             )
           )
@@ -33,7 +46,10 @@ client.on("messageCreate", async (message) => {
     return;
   }
 
-  if (message.channel.type != ChannelType.GuildAnnouncement) return;
+  if (message.channel.type !== ChannelType.GuildAnnouncement) return;
+  if (!message.channel.permissionsFor(client.user!)?.has("ManageMessages"))
+    return;
+
   if (message.channel.topic?.includes("{no_autopublish}")) return;
   if (
     message.channel.topic?.includes("{no_autopublish:bots}") &&
@@ -51,6 +67,10 @@ client.on("messageCreate", async (message) => {
   if (message.content.startsWith("=>")) return;
 
   await message.crosspost();
+});
+
+client.on("ready", () => {
+  console.log(`Logged in as ${client.user?.tag}`);
 });
 
 await client.login(process.env["TOKEN"]);
