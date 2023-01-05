@@ -3,6 +3,7 @@ import {
   Client,
   EmbedBuilder,
   GatewayIntentBits,
+  DiscordAPIError,
 } from "discord.js";
 import fs from "fs";
 
@@ -66,7 +67,12 @@ client.on("messageCreate", async (message) => {
 
   if (message.content.startsWith("=>")) return;
 
-  await message.crosspost();
+  try {
+    await message.crosspost();
+  } catch (e) {
+    if (e instanceof DiscordAPIError) return; // The message was deleted (presumably while we were on a cooldown)
+    throw e;
+  }
 });
 
 client.on("ready", () => {
