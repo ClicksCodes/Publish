@@ -79,7 +79,7 @@ client.on("ready", () => {
   console.log(`Logged in as ${client.user?.tag}`);
 });
 
-process.on('unhandledRejection', (event) => {
+process.on('unhandledRejection', (event: PromiseRejectionEvent) => {
   console.log('Unhandled rejection at ', event.promise, `reason: ${event.reason}. Ignoring...`)
 })
 
