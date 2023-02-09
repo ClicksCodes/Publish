@@ -79,4 +79,8 @@ client.on("ready", () => {
   console.log(`Logged in as ${client.user?.tag}`);
 });
 
+process.on('unhandledRejection', (reason, promise) => {
+  console.log('Unhandled rejection at ', promise, `reason: ${err.message}. Ignoring...`)
+})
+
 await client.login(process.env["TOKEN"]);
